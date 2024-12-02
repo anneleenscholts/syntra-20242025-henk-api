@@ -1,25 +1,24 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const dotenv = require("dotenv");
-const authRoutes = require("./routes/auth");
-const { sequelize } = require("./models/User");
+import express from 'express';
+import { Router } from 'express';
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+import { initDB } from './config/db.js';
+import { initRoutes } from "./controllers/router.js";
 
 dotenv.config();
 
 const app = express();
+const router = Router();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(bodyParser.json());
 
 // Routes
-app.use("/api/auth", authRoutes);
+initRoutes(router);
+app.use("/api", router);
 
-// Connect to PostgreSQL
-sequelize
-  .authenticate()
-  .then(() => console.log("Database connected"))
-  .catch((err) => console.error("Unable to connect to the database:", err));
+initDB(process.env.DB_CONNECTION_STRING)
 
 // Start the server
 app.listen(PORT, () => {

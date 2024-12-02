@@ -1,9 +1,6 @@
-const { Sequelize, DataTypes } = require("sequelize");
-require("dotenv").config();  // Load environment variables
+import { DataTypes } from 'sequelize';
 
-const sequelize = new Sequelize(process.env.DB_CONNECTION_STRING);
-
-const User = sequelize.define("User", {
+export const UserDefinition = {
   username: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -17,15 +14,5 @@ const User = sequelize.define("User", {
   password: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-});
-
-sequelize.sync()
-  .then(() => {
-    console.log("Database synced successfully");
-  })
-  .catch((err) => {
-    console.error("Error syncing database:", err);
-  });
-
-module.exports = { sequelize, User };
+  }
+}
