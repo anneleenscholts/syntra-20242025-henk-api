@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
 import { createUser, findOne } from '../repositories/UserRepository.js';
-import { BadRequestError } from "../models/BadRequestError.js";
+import { BadRequestError } from "../models/errors/BadRequestError.js";
 
 export const registerUser = async (username, email, password) => {
     const exists = await findOne(email);

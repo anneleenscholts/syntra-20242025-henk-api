@@ -1,5 +1,5 @@
-import { BadRequestError } from "../models/BadRequestError.js";
-import { NotFoundError } from "../models/NotFoundError.js";
+import { BadRequestError } from "../models/errors/BadRequestError.js";
+import { NotFoundError } from "../models/errors/NotFoundError.js";
 
 export const errorHandlingMiddleware = (err, req, res, next) => {
     if (err instanceof NotFoundError) {
