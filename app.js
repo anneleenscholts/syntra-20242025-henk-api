@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import { initDB } from './config/db.js';
 import { initRoutes } from "./controllers/router.js";
+import { errorHandlingMiddleware } from './middleware/errorHandling.js';
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(bodyParser.json());
 // Routes
 initRoutes(router);
 app.use("/api", router);
+app.use(errorHandlingMiddleware)
 
 initDB(process.env.DB_CONNECTION_STRING)
 
