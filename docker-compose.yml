@@ -1,8 +1,6 @@
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     ports:
       - "3000:3000"
     environment:
@@ -11,6 +9,7 @@ services:
       - db
     volumes:
       - .:/app
+      - /app/node_modules # Avoid overwriting node_modules
 
   db:
     image: postgres:15

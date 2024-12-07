@@ -28,5 +28,6 @@ export const loginUser = async (email, password) => {
         expiresIn: "1h",
     });
 
-    return token;
+    const { password: pw, ...returnUser } = user.toJSON()
+    return { token, returnUser };
 };
