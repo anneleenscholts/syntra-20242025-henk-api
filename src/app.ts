@@ -20,7 +20,9 @@ initRoutes(router);
 app.use("/api", router);
 app.use(errorHandlingMiddleware)
 
-initDB(process.env.DB_CONNECTION_STRING)
+const connectionString = process.env.DB_CONNECTION_STRING || "";
+
+initDB(connectionString)
 
 // Start the server
 app.listen(PORT, () => {

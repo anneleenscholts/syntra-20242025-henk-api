@@ -16,3 +16,9 @@ export const UserDefinition = {
     allowNull: false,
   }
 }
+
+export interface IUser {
+    username: string,
+    email: string,
+    password: string
+}

@@ -1,16 +1,4 @@
 services:
-  app:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      - DATABASE_URL=postgres://postgres:password@db:5432/henk_api
-    depends_on:
-      - db
-    volumes:
-      - .:/app
-      - /app/node_modules # Avoid overwriting node_modules
-
   db:
     image: postgres:15
     environment:

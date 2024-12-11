@@ -4,6 +4,10 @@ export const GroupDefinition = {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: false,
     }
+}
+
+export interface IGroup {
+    name: string
 }
