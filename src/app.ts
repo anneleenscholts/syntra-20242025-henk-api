@@ -1,5 +1,4 @@
 import express, { Router } from 'express';
-import cors from 'cors';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import { initDB } from './db/db.js';
@@ -22,9 +21,10 @@ expressJSDocSwagger(app)(swaggerOpts);
 app.use(bodyParser.json());
 
 // Routes
+app.use(express.json());
 initRoutes(router);
 app.use("/api", router);
-app.use(errorHandlingMiddleware);
+app.use(errorHandlingMiddleware)
 
 const connectionString = process.env.DB_CONNECTION_STRING || "";
 

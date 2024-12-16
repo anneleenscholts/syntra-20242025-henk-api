@@ -54,7 +54,7 @@ export const getUserById = async (id: number) => {
 export const deleteUserById = async (id: number) => {
     const success = await deleteById(id);
     if (!success) {
-        throw BadRequestError;
+        throw new BadRequestError(`Could not delete user with id ${id}`);
     } else {
         return true;
     }
