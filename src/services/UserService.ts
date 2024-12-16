@@ -31,16 +31,22 @@ export const loginUser = async (email: string, password: string) => {
         expiresIn: "1h",
     });
 
-    const { password: pw, ...returnUser } = user.toJSON()
-    return { token, returnUser };
+    return token;
 };
 
 export const getAllUsers = async () => {
     const users = await findAll();
-    return users;
+
+    const returnUsers = users.map(user => {
+        const { username, email } = user.toJSON();
+        return {
+            username, email
+        }
+    })
+    return returnUsers;
 }
 
-export const getUserById = async(id: number) => {
+export const getUserById = async (id: number) => {
     const user = await findOneById(id);
     return user;
 }

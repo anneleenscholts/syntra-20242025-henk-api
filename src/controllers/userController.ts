@@ -2,8 +2,31 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { getAllUsers, getUserById, deleteUserById } from '../services/UserService.js';
 import { jwtMiddleware } from '../middleware/errorHandling.js';
 
+/**
+ * A User
+ * @typedef {object} User
+ * @property {string} email.required - Email
+ * @property {string} password.required - Password
+ */
+
+
 export const initUserRoutes = (router: Router) => {
+    /**
+    * GET /users
+    * @tags Users
+    * @summary Get all users (you have access to)
+    * @description Get all users that you have access to (to be defined what this means)
+    * @return {RegisterResponse} 201 - Successful registration
+    */
     router.get('/users', jwtMiddleware, getUsers);
+    /**
+    * GET /users/:id
+    * @tags Users
+    * @summary Get all users (you have access to)
+    * @description Get all users that you have access to (to be defined what this means)
+    * @param {string} id.query.required - The id of the user you want to fetch
+    * @return {RegisterResponse} 201 - Successful registration
+    */
     router.get('/users/:id', jwtMiddleware, getUser);
     router.delete('/users/:id', jwtMiddleware, deleteUser);
     // router.patch('users/:id', editUser);

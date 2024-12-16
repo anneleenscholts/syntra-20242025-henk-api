@@ -1,4 +1,4 @@
-import { User } from "../config/db.js";
+import { User } from "../db/db.js";
 
 export const findOne = async (email: string) => {
     return User.findOne({ where: { email } });

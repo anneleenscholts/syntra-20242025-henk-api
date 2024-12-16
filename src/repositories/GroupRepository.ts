@@ -1,4 +1,4 @@
-import { Group } from "../config/db.js";
+import { Group } from "../db/db.js";
 
 export const findOne = async (name: string) => {
     return Group.findOne({ where: { name } });
