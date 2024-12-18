@@ -18,7 +18,7 @@ export const swaggerOpts = {
   notRequiredAsNullable: false,
   security: {
     BearerAuth: {
-      type: 'https',
+      type: 'http',
       scheme: 'bearer',
     },
   },
