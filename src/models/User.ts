@@ -6,6 +6,20 @@ export const UserDefinition = {
     allowNull: false,
     unique: true,
   },
+  firstName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: false,
+  },
+  lastName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: false,
+  },
+  defaultLanguage: {
+    type: DataTypes.STRING,
+    defaultValue: "en"
+  },
   email: {
     type: DataTypes.STRING,
     allowNull: false,

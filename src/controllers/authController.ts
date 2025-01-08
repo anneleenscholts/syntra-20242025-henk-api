@@ -5,15 +5,28 @@ import { registerUser, loginUser } from '../services/UserService.js';
  * A User
  * @typedef {object} RegisterUser
  * @property {string} username.required - Username
+ * @property {string} firstName - First name
+ * @property {string} lastName - Last name
+ * @property {string} defaultLanguage - Default language
  * @property {string} email.required - Email
  * @property {string} password.required - Password
+ */
+
+/**
+ * A User
+ * @typedef {object} ReturnUser
+ * @property {string} username.required - Username
+ * @property {string} firstName - First name
+ * @property {string} lastName - Last name
+ * @property {string} defaultLanguage - Default language
+ * @property {string} email.required - Email
  */
 
 /**
  * Register response
  * @typedef {object} RegisterResponse
  * @property {string} message - Status message
- * @property {RegisterUser} user - Registered user
+ * @property {ReturnUser} user - Registered user
  */
 
 /**
@@ -53,9 +66,9 @@ export const initAuthRoutes = (router: Router) => {
 }
 
 const register = async (req: Request, res: Response, next: NextFunction): Promise<void | undefined> => {
-    const { username, email, password } = req.body;
+    const { username, email, password, firstName, lastName, defaultLanguage } = req.body;
     try {
-        const user = await registerUser(username, email, password);
+        const user = await registerUser(username, email, password, firstName ?? '', lastName ?? '', defaultLanguage ?? null);
         res.status(201).json({ message: "User created successfully", user });
     } catch (error) {
         console.error('error', error)

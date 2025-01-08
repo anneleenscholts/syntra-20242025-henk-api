@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { createGroup, deleteGroupById, getAllGroups, getGroupById } from '../services/GroupService.js';
+import { createGroup, deleteGroupById, getAllGroupsForUser, getGroupById } from '../services/GroupService.js';
 import { jwtMiddleware } from '../middleware/errorHandling.js';
 
 /**
@@ -32,7 +32,7 @@ export const initGroupRoutes = (router: Router) => {
 
 const getGroups = async (req: Request, res: Response, next: NextFunction): Promise<void | undefined> => {
     try {
-        const groups = await getAllGroups();
+        const groups = await getAllGroupsForUser(Number(req.user.userId));
         res.status(200).json(groups);
     } catch (error) {
         console.error('error', error);
@@ -63,7 +63,7 @@ const deleteGroup = async (req: Request, res: Response, next: NextFunction): Pro
 const createNewGroup = async (req: Request, res: Response, next: NextFunction): Promise<void | undefined> => {
     const { name } = req.body;
     try {
-        const group = await createGroup(name);
+        const group = await createGroup(name, Number(req.user.userId));
         res.status(201).json({ message: "Group created successfully", group });
     } catch (error) {
         console.error('error', error)
