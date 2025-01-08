@@ -11,7 +11,7 @@ export const initDB = async (connectionString: string) => {
     db = new Sequelize(connectionString);
     await db.authenticate();
     initModels();
-    db.sync();
+    db.sync({alter: true});
 }
 
 const initModels = () => {
