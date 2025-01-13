@@ -2,32 +2,33 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { getAllUsers, getUserById, deleteUserById } from '../services/UserService.js';
 import { jwtMiddleware } from '../middleware/errorHandling.js';
 
-/**
- * A User
- * @typedef {object} User
- * @property {string} email.required - Email
- * @property {string} password.required - Password
- */
-
-
 export const initUserRoutes = (router: Router) => {
     /**
     * GET /users
     * @tags Users
-    * @summary Get all users (you have access to)
-    * @description Get all users that you have access to (to be defined what this means)
-    * @return {RegisterResponse} 201 - Successful registration
+    * @summary Get all users
+    * @description Get all users that you have access to (to be defined what this means?)
+    * @return {array<UserDTO>} 200 - Array of Users
     */
     router.get('/users', jwtMiddleware, getUsers);
     /**
     * GET /users/:id
     * @tags Users
-    * @summary Get all users (you have access to)
-    * @description Get all users that you have access to (to be defined what this means)
+    * @summary Get user by id
+    * @description Get specific user if you have access to that user (to be defined what this means)
     * @param {string} id.query.required - The id of the user you want to fetch
-    * @return {RegisterResponse} 201 - Successful registration
+    * @return {UserDTO} 200 - User object
     */
     router.get('/users/:id', jwtMiddleware, getUser);
+
+    /**
+    * DELETE /users/:id
+    * @tags Users
+    * @summary Delete a user by id
+    * @description Delete a specific user if you have access to that user (to be defined what this means)
+    * @param {string} id.query.required - The id of the user you want to delete
+    * @return 200
+    */
     router.delete('/users/:id', jwtMiddleware, deleteUser);
     // router.patch('users/:id', editUser);
 }
@@ -55,7 +56,7 @@ const getUser = async (req: Request, res: Response, next: NextFunction): Promise
 const deleteUser = async (req: Request, res: Response, next: NextFunction): Promise<void | undefined> => {
     try {
         const success = await deleteUserById(Number(req.params.id));
-        res.status(200).json({});
+        res.status(200);
     } catch (error) {
         console.error('error', error);
         next(error);

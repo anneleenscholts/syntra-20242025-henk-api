@@ -26,7 +26,24 @@ export const initGroupRoutes = (router: Router) => {
     * @return {Group} 200 - Successful 
     */
     router.get('/groups/:id', jwtMiddleware, getGroup);
+
+    /**
+    * DELETE /groups/:id
+    * @tags Groups
+    * @summary Delete a group by id
+    * @description Delete a specific group if you have access to that user (to be defined what this means)
+    * @param {string} id.query.required - The id of the group you want to delete
+    * @return 200
+    */
     router.delete('/groups/:id', jwtMiddleware, deleteGroup);
+    /**
+    * POST /groups
+    * @tags Groups
+    * @summary Create a group
+    * @description Create a new group
+     @param {Group} request.body.required - Group name
+    * @return {Group} 201 - Successful 
+    */
     router.post('/groups', jwtMiddleware, createNewGroup);
 }
 

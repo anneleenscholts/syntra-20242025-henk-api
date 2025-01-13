@@ -2,38 +2,10 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { registerUser, loginUser } from '../services/UserService.js';
 
 /**
- * A User
- * @typedef {object} RegisterUser
- * @property {string} username.required - Username
- * @property {string} firstName - First name
- * @property {string} lastName - Last name
- * @property {string} defaultLanguage - Default language
- * @property {string} email.required - Email
- * @property {string} password.required - Password
- */
-
-/**
- * A User
- * @typedef {object} ReturnUser
- * @property {string} username.required - Username
- * @property {string} firstName - First name
- * @property {string} lastName - Last name
- * @property {string} defaultLanguage - Default language
- * @property {string} email.required - Email
- */
-
-/**
  * Register response
  * @typedef {object} RegisterResponse
  * @property {string} message - Status message
- * @property {ReturnUser} user - Registered user
- */
-
-/**
- * A User
- * @typedef {object} User
- * @property {string} email.required - Email
- * @property {string} password.required - Password
+ * @property {UserDTO} user - Registered user
  */
 
 /**
@@ -58,7 +30,7 @@ export const initAuthRoutes = (router: Router) => {
     * POST /auth/login
     * @tags Authentication and authorization
     * @summary Login and get access token
-    * @description Exchange user credentials for an access token to use the application
+    * @description Exchange user credentials for an access token to use the api
     * @param {User} request.body.required - User credentials
     * @return {LoginResponse} 200 - Successful login
     */
