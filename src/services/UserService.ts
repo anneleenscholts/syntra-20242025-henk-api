@@ -38,10 +38,9 @@ export const getAllUsers = async () => {
     const users = await findAll();
 
     const returnUsers = users.map(user => {
-        const { id, username, email } = user.toJSON();
-        return {
-            id, username, email
-        }
+        const { password, ...returnUser } = user.toJSON();
+        console.log(user);
+        return returnUser;
     })
     return returnUsers;
 }
