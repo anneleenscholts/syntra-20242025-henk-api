@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
-import { UserDefinition } from '../models/User.js';
-import { GroupDefinition } from '../models/Group.js';
-import { EventDefinition } from '../models/Event.js';
+import { UserDefinition } from '../models/db/User.js';
+import { GroupDefinition } from '../models/db/Group.js';
+import { EventDefinition } from '../models/db/Event.js';
 
 // Connect to PostgreSQL
 let User, Group, Event;

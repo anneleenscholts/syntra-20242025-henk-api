@@ -1,9 +1,10 @@
+import { IEventToCreate } from '../models/models.js';
 import { createEvent, findAllUserEvents } from '../repositories/EventRepository.js';
 import { findOneById as findUserById } from '../repositories/UserRepository.js';
 import { getGroupById, getGroupByName } from './GroupService.js';
 
 
-export async function createNewEventForGroup(eventToCreate: { title: string, description: string, end: string, start: string }, userId: number, groupId: number) {
+export async function createNewEventForGroup(eventToCreate: IEventToCreate, userId: number, groupId: number) {
     const event = await createEvent({ ...eventToCreate, organizer: userId });
     let group;
     if (groupId) {

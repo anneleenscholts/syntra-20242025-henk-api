@@ -3,15 +3,16 @@ import jwt from "jsonwebtoken";
 import { createUser, findAll, findOneById, deleteById, checkIfExists, findOneByEmail } from '../repositories/UserRepository.js';
 import { BadRequestError } from "../models/errors/BadRequestError.js";
 import { createGroup } from './GroupService.js';
+import { IUserToCreate } from '../models/models.js';
 
-export const registerUser = async (username: string, email: string, password: string, firstName: string, lastName: string, defaultLanguage?: string) => {
-    const exists = await checkIfExists(email, username);
+export const registerUser = async (userToCreate: IUserToCreate) => {
+    const exists = await checkIfExists(userToCreate.email, userToCreate.username);
     if (exists) {
         throw new BadRequestError("User already exists");
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await createUser(username, email, hashedPassword, firstName, lastName, defaultLanguage ?? null);
-    const defaultGroup = await createGroup(username);
+    const hashedPassword = await bcrypt.hash(userToCreate.password, 10);
+    const user = await createUser(userToCreate);
+    const defaultGroup = await createGroup(userToCreate.username);
     await user.addGroup(defaultGroup);
     return user;
 }

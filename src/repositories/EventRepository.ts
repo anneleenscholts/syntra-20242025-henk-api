@@ -1,6 +1,7 @@
 import { Event, Group, User } from "../db/db.js";
+import { IEvent } from "../models/models.js";
 
-export const createEvent = async (evenToCreate: { title: string, description: string, end: string, start: string, organizer: number }) => {
+export const createEvent = async (evenToCreate: IEvent) => {
     return Event.create(evenToCreate);
 }
 
