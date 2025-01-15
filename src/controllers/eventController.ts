@@ -7,7 +7,8 @@ export const initEventRoutes = (router: Router) => {
     * GET /events
     * @tags Events
     * @summary Get all events (you have access to)
-    * @description Get all events that you have access to (to be defined what this means)
+    * @description Get all events that you have access to
+    * @return {array<CreatedEvent>} 200 - Array of events
     */
     router.get('/events', jwtMiddleware, getEvents);
 
@@ -24,7 +25,7 @@ export const initEventRoutes = (router: Router) => {
 
 const getEvents = async (req: Request, res: Response, next: NextFunction): Promise<void | undefined> => {
     try {
-        const events = await getAllEventsForAUser();
+        const events = await getAllEventsForAUser(Number(req.user.userId));
         res.status(200).json(events);
     } catch (error) {
         console.error('error', error);

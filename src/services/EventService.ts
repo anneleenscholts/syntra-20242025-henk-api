@@ -1,4 +1,4 @@
-import { createEvent, findAllEvents } from '../repositories/EventRepository.js';
+import { createEvent, findAllUserEvents } from '../repositories/EventRepository.js';
 import { findOneById as findUserById } from '../repositories/UserRepository.js';
 import { getGroupById, getGroupByName } from './GroupService.js';
 
@@ -17,6 +17,6 @@ export async function createNewEventForGroup(eventToCreate: { title: string, des
     return { ...event.toJSON(), groupId: group.toJSON().id };
 }
 
-export function getAllEventsForAUser() {
-    return findAllEvents()
+export function getAllEventsForAUser(userId: number) {
+    return findAllUserEvents(userId)
 }

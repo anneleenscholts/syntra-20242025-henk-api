@@ -21,6 +21,7 @@ const initModels = () => {
     const UserGroup = db.define('UserGroup', {});
 
     Group.hasMany(Event, {foreignKey: "groupId"});
+    Event.belongsTo(Group, { foreignKey: "groupId" });
 
     User.hasOne(Event, {foreignKey: "organizer"});
 

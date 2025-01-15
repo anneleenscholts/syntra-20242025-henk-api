@@ -1,10 +1,27 @@
-import { Op } from "sequelize";
-import { Event } from "../db/db.js";
+import { Event, Group, User } from "../db/db.js";
 
 export const createEvent = async (evenToCreate: { title: string, description: string, end: string, start: string, organizer: number }) => {
     return Event.create(evenToCreate);
 }
 
-export const findAllEvents = async () => {
-    return Event.findAll();
+export const findAllUserEvents = async (userId) => {
+    const events = await Event.findAll({
+        include: [
+            {
+                model: Group,
+                attributes: [],
+                required: true,
+                include: [
+                    {
+                        model: User,
+                        attributes: [],
+                        where: { id: userId },
+                        through: { attributes: [] },
+                    },
+                ],
+            },
+        ],
+    });
+
+    return events;
 }
