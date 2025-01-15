@@ -38,9 +38,8 @@ export const initAuthRoutes = (router: Router) => {
 }
 
 const register = async (req: Request, res: Response, next: NextFunction): Promise<void | undefined> => {
-    const { username, email, password, firstName, lastName, defaultLanguage } = req.body;
     try {
-        const user = await registerUser(username, email, password, firstName ?? '', lastName ?? '', defaultLanguage ?? null);
+        const user = await registerUser(req.body);
         res.status(201).json({ message: "User created successfully", user });
     } catch (error) {
         console.error('error', error)
