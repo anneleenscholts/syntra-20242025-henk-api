@@ -1,10 +1,10 @@
 import { Sequelize } from 'sequelize';
 import { UserDefinition } from '../models/User.js';
 import { GroupDefinition } from '../models/Group.js';
+import { EventDefinition } from '../models/Event.js';
 
 // Connect to PostgreSQL
-let User;
-let Group;
+let User, Group, Event;
 let db: Sequelize;
 
 export const initDB = async (connectionString: string) => {
@@ -17,7 +17,12 @@ export const initDB = async (connectionString: string) => {
 const initModels = () => {
     User = db.define("User", UserDefinition);
     Group = db.define("Group", GroupDefinition);
+    Event = db.define("Event", EventDefinition)
     const UserGroup = db.define('UserGroup', {});
+
+    Group.hasMany(Event, {foreignKey: "groupId"});
+
+    User.hasOne(Event, {foreignKey: "organizer"});
 
     User.belongsToMany(Group, { through: UserGroup });
     Group.belongsToMany(User, { through: UserGroup });
@@ -26,5 +31,6 @@ const initModels = () => {
 export {
     User,
     Group,
+    Event,
     db
 }
