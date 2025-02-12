@@ -8,12 +8,6 @@ import {
 } from "../services/GroupService.js";
 import { jwtMiddleware } from "../middleware/errorHandling.js";
 
-/**
- * A User
- * @typedef {object} Group
- * @property {string} name.required - Name
- */
-
 export const initGroupRoutes = (router: Router) => {
   /**
    * GET /groups
