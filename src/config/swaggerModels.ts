@@ -75,3 +75,11 @@
  * @property {string} message - Status message
  * @property {string} token - Access token
  */
+
+/**
+ * User Preferences
+ * @typedef {object} UserPreferences
+ * @property {string} city - The prefered city
+ * @property {string} app - The prefered application
+ * @property {string} theme - The prefered theme
+ */
