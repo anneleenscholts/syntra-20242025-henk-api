@@ -21,6 +21,7 @@ export const initGroupRoutes = (router: Router) => {
    * @tags Groups
    * @summary Get all groups (you have access to)
    * @description Get all groups that you have access to (to be defined what this means)
+   * @return {array<Group>} 200 - Successful
    */
   router.get("/groups", jwtMiddleware, getGroups);
   /**
@@ -50,7 +51,7 @@ export const initGroupRoutes = (router: Router) => {
    * @tags Groups
    * @summary Create a group
    * @description Create a new group
-   * @param {Group} request.body.required - Group name
+   * @param {CreateGroup} request.body.required - Group name
    * @return {Group} 201 - Successful
    */
   router.post("/groups", jwtMiddleware, createNewGroup);

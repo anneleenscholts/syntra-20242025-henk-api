@@ -6,6 +6,21 @@
  */
 
 /**
+ * A Group
+ * @typedef {object} Group
+ * @property {string} id - Group id
+ * @property {string} name - Group name
+ * @property {string} createdAt - Created timestamp
+ * @property {string} updatedAt - Updated timestamp
+ */
+
+/**
+ * A CreateGroup
+ * @typedef {object} CreateGroup
+ * @property {string} name.required - Group name
+ */
+
+/**
  * A User
  * @typedef {object} RegisterUser
  * @property {string} username.required - Username
@@ -45,4 +60,18 @@
  * @property {string} start.required - Start time
  * @property {string} end.required - End time
  * @property {string} organizer.required - The organizer / creator of the event
+ */
+
+/**
+ * Register response
+ * @typedef {object} RegisterResponse
+ * @property {string} message - Status message
+ * @property {UserDTO} user - Registered user
+ */
+
+/**
+ * Login response
+ * @typedef {object} LoginResponse
+ * @property {string} message - Status message
+ * @property {string} token - Access token
  */
