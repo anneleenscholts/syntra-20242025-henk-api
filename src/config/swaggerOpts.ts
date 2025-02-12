@@ -1,7 +1,7 @@
-import { fileURLToPath } from 'url';
-import path from 'path';
+import { fileURLToPath } from "url";
+import path from "path";
 
-const __filename = fileURLToPath(import.meta.url.split('dist')[0]);
+const __filename = fileURLToPath(import.meta.url.split("dist")[0]);
 const __dirname = path.dirname(`${__filename}dist`);
 
 export const swaggerOpts = {
@@ -16,16 +16,24 @@ export const swaggerOpts = {
   exposeSwaggerUI: true,
   exposeApiDocs: true,
   notRequiredAsNullable: false,
+  components: {
+    securitySchemes: {
+      BearerAuth: {
+        type: "http",
+        scheme: "bearer",
+      },
+    },
+  },
   security: {
     BearerAuth: {
-      type: 'http',
-      scheme: 'bearer',
+      type: "http",
+      scheme: "bearer",
     },
   },
   servers: [
     {
-      url: 'https://syntra-20242025-henk-api.onrender.com/api',
-      description: 'The API server'
+      url: "https://syntra-20242025-henk-api.onrender.com/api",
+      description: "The API server",
     },
   ],
 };
