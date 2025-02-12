@@ -3,6 +3,8 @@ import {
   getAllUsers,
   getUserById,
   deleteUserById,
+  savePreferencesForUser,
+  getPreferencesForUser,
 } from "../services/UserService.js";
 import { jwtMiddleware } from "../middleware/errorHandling.js";
 
@@ -16,6 +18,28 @@ export const initUserRoutes = (router: Router) => {
    * @return {array<UserDTO>} 200 - Array of Users
    */
   router.get("/users", jwtMiddleware, getUsers);
+
+  /**
+   * PUT /users/preferences
+   * @security BearerAuth
+   * @tags Users
+   * @summary Save the user preferences
+   * @description Save the user preferences for the logged in user
+   * @param {UserPreferences} request.body.required - User preferences
+   * @return {UserPreferences} 201 - User preferences
+   */
+  router.put("/users/preferences", jwtMiddleware, saveUserPreferences);
+
+  /**
+   * GET /users/preferences
+   * @security BearerAuth
+   * @tags Users
+   * @summary Get the user preferences
+   * @description Get the user preferences for the logged in user
+   * @return {UserPreferences} 201 - User preferences
+   */
+  router.get("/users/preferences", jwtMiddleware, getUserPreferences);
+
   /**
    * GET /users/:id
    * @security BearerAuth
@@ -37,7 +61,6 @@ export const initUserRoutes = (router: Router) => {
    * @return 200
    */
   router.delete("/users/:id", jwtMiddleware, deleteUser);
-  // router.patch('users/:id', editUser);
 };
 
 const getUsers = async (
@@ -74,8 +97,39 @@ const deleteUser = async (
   next: NextFunction
 ): Promise<void | undefined> => {
   try {
-    const success = await deleteUserById(Number(req.params.id));
+    await deleteUserById(Number(req.params.id));
     res.status(200);
+  } catch (error) {
+    console.error("error", error);
+    next(error);
+  }
+};
+
+const saveUserPreferences = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | undefined> => {
+  try {
+    const preferences = await savePreferencesForUser(
+      { ...req.body },
+      Number(req.user.userId)
+    );
+    res.status(200).json(preferences);
+  } catch (error) {
+    console.error("error", error);
+    next(error);
+  }
+};
+
+const getUserPreferences = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | undefined> => {
+  try {
+    const preferences = await getPreferencesForUser(Number(req.user.userId));
+    res.status(200).json(preferences);
   } catch (error) {
     console.error("error", error);
     next(error);

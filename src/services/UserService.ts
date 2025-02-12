@@ -7,10 +7,14 @@ import {
   deleteById,
   checkIfExists,
   findOneByEmail,
+  createUserPreferences,
+  updateUserPreferences,
+  getUserPreferences,
 } from "../repositories/UserRepository.js";
 import { BadRequestError } from "../models/errors/BadRequestError.js";
 import { createGroup } from "./GroupService.js";
 import { IUserToCreate } from "../models/models.js";
+import { IUserPreferences } from "../models/db/UserPreferences.js";
 
 export const registerUser = async (userToCreate: IUserToCreate) => {
   const exists = await checkIfExists(userToCreate.email, userToCreate.username);
@@ -20,6 +24,8 @@ export const registerUser = async (userToCreate: IUserToCreate) => {
   const hashedPassword = await bcrypt.hash(userToCreate.password, 10);
   const user = await createUser({ ...userToCreate, password: hashedPassword });
   const defaultGroup = await createGroup(userToCreate.username);
+  await createUserPreferences(user.toJSON().id);
+
   await user.addGroup(defaultGroup);
   return user;
 };
@@ -65,4 +71,16 @@ export const deleteUserById = async (id: number) => {
   } else {
     return true;
   }
+};
+
+export const savePreferencesForUser = async (
+  preferences: IUserPreferences,
+  id: number
+) => {
+  return updateUserPreferences(id, preferences);
+};
+
+export const getPreferencesForUser = async (id: number) => {
+  const preferences = await getUserPreferences(id);
+  return preferences.toJSON();
 };
