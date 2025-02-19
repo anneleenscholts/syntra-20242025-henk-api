@@ -10,10 +10,11 @@ import {
   createUserPreferences,
   updateUserPreferences,
   getUserPreferences,
+  update,
 } from "../repositories/UserRepository.js";
 import { BadRequestError } from "../models/errors/BadRequestError.js";
 import { createGroup } from "./GroupService.js";
-import { IUserToCreate } from "../models/models.js";
+import { IUserToCreate, IUserToUpdate } from "../models/models.js";
 import { IUserPreferences } from "../models/db/UserPreferences.js";
 
 export const registerUser = async (userToCreate: IUserToCreate) => {
@@ -71,6 +72,16 @@ export const deleteUserById = async (id: number) => {
   } else {
     return true;
   }
+};
+
+export const updateUserById = async (id: number, user: IUserToUpdate) => {
+  const updatedUser = await findOneById(id);
+  if (!updatedUser) {
+    throw new BadRequestError(`Could not find user with id ${id}`);
+  }
+
+  await update(id, user);
+  return user;
 };
 
 export const savePreferencesForUser = async (

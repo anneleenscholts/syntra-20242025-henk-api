@@ -5,10 +5,32 @@ import {
   deleteUserById,
   savePreferencesForUser,
   getPreferencesForUser,
+  updateUserById,
 } from "../services/UserService.js";
 import { jwtMiddleware } from "../middleware/errorHandling.js";
 
 export const initUserRoutes = (router: Router) => {
+  /**
+   * GET /users/me
+   * @security BearerAuth
+   * @tags Users
+   * @summary Get the logged in user
+   * @description Get the user object for the logged in user
+   * @return {UserDTO} 200 - User object
+   */
+  router.get("/users/me", jwtMiddleware, getLoggedInUser);
+
+  /**
+   * PUT /users/me
+   * @security BearerAuth
+   * @tags Users
+   * @summary Update the logged in user
+   * @param {UserDTO} request.body.required - User object
+   * @description Update the user object for the logged in user
+   * @return {UserDTO} 200 - User object
+   */
+  router.put("/users/me", jwtMiddleware, updateLoggedInUser);
+
   /**
    * GET /users
    * @security BearerAuth
@@ -84,6 +106,35 @@ const getUser = async (
 ): Promise<void | undefined> => {
   try {
     const user = await getUserById(Number(req.params.id));
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("error", error);
+    next(error);
+  }
+};
+
+const getLoggedInUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | undefined> => {
+  try {
+    const user = await getUserById(Number(req.user.userId));
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("error", error);
+    next(error);
+  }
+};
+
+const updateLoggedInUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | undefined> => {
+  const userToUpdate = { ...req.body };
+  try {
+    const user = await updateUserById(Number(req.user.userId), userToUpdate);
     res.status(200).json(user);
   } catch (error) {
     console.error("error", error);
