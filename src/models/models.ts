@@ -1,25 +1,25 @@
 export interface IEventToCreate {
-    end: string,
-    title: string,
-    description: string,
-    start: string
+  title: string;
+  description: string;
+  start: Date;
+  end: Date;
 }
 
 type UserID = number;
 
 export interface IEvent {
-    end: string,
-    title: string,
-    description: string,
-    start: string,
-    organizer: UserID
+  title: string;
+  description: string;
+  start: Date;
+  end: Date;
+  organizer: UserID;
 }
 
 export interface IUserToCreate {
-    username: string,
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string,
-    defaultLanguage?: string
+  username: string;
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  defaultLanguage?: string;
 }

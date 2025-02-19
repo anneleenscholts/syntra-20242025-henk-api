@@ -12,6 +12,8 @@ export const initEventRoutes = (router: Router) => {
    * @tags Events
    * @summary Get all events (you have access to)
    * @description Get all events that you have access to
+   * @param {string} from.query.optional - Start date filter
+   * @param {string} to.query.optional - End date filter
    * @return {array<CreatedEvent>} 200 - Array of events
    */
   router.get("/events", jwtMiddleware, getEvents);
@@ -34,7 +36,15 @@ const getEvents = async (
   next: NextFunction
 ): Promise<void | undefined> => {
   try {
-    const events = await getAllEventsForAUser(Number(req.user.userId));
+    const from = req.query.from
+      ? new Date(req.query.from as string)
+      : undefined;
+    const to = req.query.to ? new Date(req.query.to as string) : undefined;
+    const events = await getAllEventsForAUser(
+      Number(req.user.userId),
+      from,
+      to
+    );
     res.status(200).json(events);
   } catch (error) {
     console.error("error", error);
@@ -47,7 +57,13 @@ const createNewEvent = async (
   res: Response,
   next: NextFunction
 ): Promise<void | undefined> => {
-  const { groupId, ...eventToCreate } = req.body;
+  const { groupId, start, end, title, description } = req.body;
+  const eventToCreate = {
+    start: new Date(start),
+    end: new Date(end),
+    title,
+    description,
+  };
   try {
     const event = await createNewEventForGroup(
       eventToCreate,
