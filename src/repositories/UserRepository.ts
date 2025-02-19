@@ -1,6 +1,6 @@
 import { Op } from "sequelize";
 import { User, UserPreferences } from "../db/db.js";
-import { IUserToCreate } from "../models/models.js";
+import { IUserToCreate, IUserToUpdate } from "../models/models.js";
 import { IUserPreferences } from "../models/db/UserPreferences.js";
 
 export const checkIfExists = async (email: string, username: string) => {
@@ -27,6 +27,10 @@ export const createUser = async (userToCreate: IUserToCreate) => {
 
 export const findAll = async () => {
   return User.findAll();
+};
+
+export const update = async (id: number, userToUpdate: IUserToUpdate) => {
+  return User.update(userToUpdate, { where: { id } });
 };
 
 export const createUserPreferences = async (id: number) => {

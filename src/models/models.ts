@@ -23,3 +23,11 @@ export interface IUserToCreate {
   lastName: string;
   defaultLanguage?: string;
 }
+
+export interface IUserToUpdate {
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  defaultLanguage?: string;
+}
