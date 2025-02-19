@@ -1,4 +1,4 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes } from "sequelize";
 
 export const EventDefinition = {
   title: {
@@ -12,13 +12,13 @@ export const EventDefinition = {
     unique: false,
   },
   start: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATE,
     allowNull: false,
     unique: false,
   },
   end: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATE,
     allowNull: false,
     unique: false,
   },
-}
+};

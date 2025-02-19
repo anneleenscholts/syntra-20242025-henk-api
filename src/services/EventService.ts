@@ -23,6 +23,6 @@ export async function createNewEventForGroup(
   return { ...event.toJSON(), groupId: group.toJSON().id };
 }
 
-export function getAllEventsForAUser(userId: number) {
-  return findAllUserEvents(userId);
+export function getAllEventsForAUser(userId: number, from: Date, to: Date) {
+  return findAllUserEvents(userId, from, to);
 }

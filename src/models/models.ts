@@ -1,17 +1,17 @@
 export interface IEventToCreate {
-  end: string;
   title: string;
   description: string;
-  start: string;
+  start: Date;
+  end: Date;
 }
 
 type UserID = number;
 
 export interface IEvent {
-  end: string;
   title: string;
   description: string;
-  start: string;
+  start: Date;
+  end: Date;
   organizer: UserID;
 }
 
