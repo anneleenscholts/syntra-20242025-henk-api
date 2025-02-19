@@ -32,8 +32,8 @@ export const swaggerOpts = {
   },
   servers: [
     {
-      // url: "https://syntra-20242025-henk-api.onrender.com/api",
-      url: "http://localhost:3000/api",
+      url: "https://syntra-20242025-henk-api.onrender.com/api",
+      // url: "http://localhost:3000/api",
       description: "The API server",
     },
   ],
