@@ -1,6 +1,7 @@
 import {
   getInvitationById,
   getInvitations,
+  removeInvitation,
 } from "../repositories/InvitationRepository.js";
 import { getUserById } from "./UserService.js";
 
@@ -21,5 +22,18 @@ export async function acceptInvitationForGroup(
   const group = await invitation.getInvitedFor();
   group.addUser(invitee);
   // Remove invitation
-  return await invitation.destroy();
+  return removeInvitation(invitationId);
+}
+
+export async function rejectInvitationForGroup(
+  invitee: number,
+  invitationId: number
+) {
+  // reject invitation
+  const invitation = await getInvitationById(invitationId);
+  if (invitation.inviteeId !== invitee) {
+    throw new Error("You can't reject this invitation");
+  }
+  // Remove invitation
+  return removeInvitation(invitationId);
 }
