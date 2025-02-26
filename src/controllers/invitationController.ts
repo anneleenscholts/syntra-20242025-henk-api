@@ -3,6 +3,7 @@ import { jwtMiddleware } from "../middleware/errorHandling.js";
 import {
   acceptInvitationForGroup,
   getAllInvitations,
+  rejectInvitationForGroup,
 } from "../services/InvitationService.js";
 
 export const initInvitationsRoutes = (router: Router) => {
@@ -25,6 +26,17 @@ export const initInvitationsRoutes = (router: Router) => {
    * @return 200
    */
   router.post("/invitations/:id/accept", jwtMiddleware, acceptInvitation);
+
+  /**
+   * POST /invitations/:id/reject
+   * @security BearerAuth
+   * @tags Invitations
+   * @summary Reject an invitation
+   * @description Reject an invitation by id
+   * @param {string} id.query.required - The id of the invitation you want to reject
+   * @return 200
+   */
+  router.post("/invitations/:id/reject", jwtMiddleware, rejectInvitation);
 };
 
 const getInvitationsList = async (
@@ -50,6 +62,21 @@ const acceptInvitation = async (
   const invitationId = Number(req.params.id);
   try {
     await acceptInvitationForGroup(invitee, invitationId);
+    res.status(200).end();
+  } catch (error) {
+    next(error);
+  }
+};
+
+const rejectInvitation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const invitee = req.user.userId;
+  const invitationId = Number(req.params.id);
+  try {
+    await rejectInvitationForGroup(invitee, invitationId);
     res.status(200).end();
   } catch (error) {
     next(error);
