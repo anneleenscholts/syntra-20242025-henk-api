@@ -32,9 +32,9 @@ const initModels = () => {
   User.hasOne(UserPreferences, { foreignKey: "userId" });
   UserPreferences.belongsTo(User, { foreignKey: "userId" });
 
-  Invitation.belongsTo(User, { foreignKey: "invitedBy" });
-  Invitation.belongsTo(User, { foreignKey: "invitee" });
-  Invitation.belongsTo(Group, { foreignKey: "invitedFor" });
+  Invitation.belongsTo(User, { foreignKey: "invitedById", as: "invitedBy" });
+  Invitation.belongsTo(User, { foreignKey: "inviteeId", as: "invitee" });
+  Invitation.belongsTo(Group, { foreignKey: "invitedForId", as: "invitedFor" });
 
   User.hasOne(Event, { foreignKey: "organizer" });
 
