@@ -15,7 +15,7 @@ export async function acceptInvitationForGroup(
 ) {
   // accept invitation
   const invitation = await getInvitationById(invitationId);
-  if (invitation.inviteeId !== invitee) {
+  if (!invitation || invitation.inviteeId !== invitee) {
     throw new Error("You can't accept this invitation");
   }
   // Add user to group in invitation
@@ -31,7 +31,7 @@ export async function rejectInvitationForGroup(
 ) {
   // reject invitation
   const invitation = await getInvitationById(invitationId);
-  if (invitation.inviteeId !== invitee) {
+  if (!invitation || invitation.inviteeId !== invitee) {
     throw new Error("You can't reject this invitation");
   }
   // Remove invitation
