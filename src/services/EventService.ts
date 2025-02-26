@@ -1,6 +1,7 @@
 import { IEventToCreate } from "../models/models.js";
 import {
   createEvent,
+  findAllPersonalEvents,
   findAllUserEvents,
 } from "../repositories/EventRepository.js";
 import { findOneById as findUserById } from "../repositories/UserRepository.js";
@@ -23,6 +24,14 @@ export async function createNewEventForGroup(
   return { ...event.toJSON(), groupId: group.toJSON().id };
 }
 
-export function getAllEventsForAUser(userId: number, from: Date, to: Date) {
+export function getAllEventsForAUser(
+  userId: number,
+  from: Date,
+  to: Date,
+  personal: boolean = false
+) {
+  if (personal) {
+    return findAllPersonalEvents(userId, from, to);
+  }
   return findAllUserEvents(userId, from, to);
 }
