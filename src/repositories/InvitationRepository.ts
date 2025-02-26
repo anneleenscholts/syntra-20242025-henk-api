@@ -37,3 +37,15 @@ export const getInvitations = async (invitee: number) => {
     attributes: { exclude: ["invitedById", "inviteeId", "invitedForId"] },
   });
 };
+
+export const getInvitationById = async (id: number) => {
+  return Invitation.findByPk(id);
+};
+
+export const removeInvitation = async (id: number) => {
+  return Invitation.destroy({
+    where: {
+      id,
+    },
+  });
+};
