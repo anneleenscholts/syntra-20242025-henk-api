@@ -1,7 +1,6 @@
 import { Op, where, col, fn } from "sequelize";
 import { Event, Group, User } from "../db/db.js";
 import { IEvent } from "../models/models.js";
-import sequelize from "sequelize";
 
 export const createEvent = async (evenToCreate: IEvent) => {
   return Event.create(evenToCreate);
@@ -22,7 +21,6 @@ export const findAllUserEvents = async (
     whereClause.end = { [Op.lte]: to };
   }
 
-  // First, get the username for the user with the given userId
   const user = await User.findByPk(userId, {
     attributes: ["username"],
   });
@@ -33,7 +31,6 @@ export const findAllUserEvents = async (
 
   const username = user.username;
 
-  // Now query for events
   const events = await Event.findAll({
     where: whereClause,
     include: [
@@ -42,7 +39,7 @@ export const findAllUserEvents = async (
         required: true,
         where: {
           [Op.not]: {
-            name: username.toLowerCase(), // Compare with the actual username value
+            name: username.toLowerCase(),
           },
         },
         include: [
@@ -75,7 +72,6 @@ export const findAllPersonalEvents = async (
     whereClause.end = { [Op.lte]: to };
   }
 
-  // First, get the username for the user with the given userId
   const user = await User.findByPk(userId, {
     attributes: ["username"],
   });
@@ -86,7 +82,6 @@ export const findAllPersonalEvents = async (
 
   const username = user.username;
 
-  // Now query for events where the group name matches the username
   const events = await Event.findAll({
     where: whereClause,
     include: [
@@ -94,7 +89,7 @@ export const findAllPersonalEvents = async (
         model: Group,
         required: true,
         where: {
-          name: username.toLowerCase(), // Match groups with name equal to username
+          name: username.toLowerCase(),
         },
         include: [
           {
