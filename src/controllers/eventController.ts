@@ -7,6 +7,18 @@ import {
 
 export const initEventRoutes = (router: Router) => {
   /**
+   * GET /events/personal
+   * @security BearerAuth
+   * @tags Events
+   * @summary Get all events in my default group
+   * @description Get all events in my default group
+   * @param {string} from.query.optional - Start date filter
+   * @param {string} to.query.optional - End date filter
+   * @return {array<CreatedEvent>} 200 - Array of events
+   */
+  router.get("/events/personal", jwtMiddleware, getPersonalEvents);
+
+  /**
    * GET /events
    * @security BearerAuth
    * @tags Events
@@ -71,6 +83,29 @@ const createNewEvent = async (
       Number(groupId)
     );
     res.status(201).json({ message: "Event created successfully", event });
+  } catch (error) {
+    console.error("error", error);
+    next(error);
+  }
+};
+
+const getPersonalEvents = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | undefined> => {
+  try {
+    const from = req.query.from
+      ? new Date(req.query.from as string)
+      : undefined;
+    const to = req.query.to ? new Date(req.query.to as string) : undefined;
+    const events = await getAllEventsForAUser(
+      Number(req.user.userId),
+      from,
+      to,
+      true
+    );
+    res.status(200).json(events);
   } catch (error) {
     console.error("error", error);
     next(error);

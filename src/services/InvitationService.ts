@@ -3,7 +3,6 @@ import {
   getInvitations,
   removeInvitation,
 } from "../repositories/InvitationRepository.js";
-import { getUserById } from "./UserService.js";
 
 export async function getAllInvitations(invitee: number) {
   return getInvitations(invitee);
