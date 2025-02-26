@@ -83,3 +83,12 @@
  * @property {string} app - The prefered application
  * @property {string} theme - The prefered theme
  */
+
+/**
+ * Invitation
+ * @typedef {object} Invitation
+ * @property {number} id - The invitation id
+ * @property {UserDTO} invitedBy - The user who invited
+ * @property {UserDTO} invitee - The user who is invited
+ * @property {Group} invitedFor - The group the user is invited for
+ */
