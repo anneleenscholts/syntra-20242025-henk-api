@@ -1,6 +1,7 @@
 import { ITask } from "../models/db/Task.js";
 import {
   createTask,
+  deleteTaskById,
   findAllUserTasks,
   findOneTaskById,
 } from "../repositories/TaskRepository.js";
@@ -15,4 +16,8 @@ export function getAllTasksForUser(userId: number) {
 
 export function getTaskByIdForUser(taskId: number, userId: number) {
   return findOneTaskById(taskId, userId);
+}
+
+export function deleteTaskByIdForUser(taskId: number, userId: number) {
+  return deleteTaskById(taskId, userId);
 }

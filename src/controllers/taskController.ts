@@ -2,6 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { jwtMiddleware } from "../middleware/errorHandling.js";
 import {
   createNewTaskForUser,
+  deleteTaskByIdForUser,
   getAllTasksForUser,
   getTaskByIdForUser,
 } from "../services/TaskService.js";
@@ -60,7 +61,7 @@ export const initTaskRoutes = (router: Router) => {
    * @param {number} taskId.path.required - Task ID
    * @return {string} 200 - Task deleted
    */
-  // router.delete("/tasks/:taskId", jwtMiddleware, deleteTaskById);
+  router.delete("/tasks/:taskId", jwtMiddleware, deleteTaskById);
 };
 
 const getTasks = async (
@@ -114,6 +115,27 @@ const getTaskById = async (
       return;
     }
     res.status(200).json(task);
+  } catch (error) {
+    console.error("error", error);
+    next(error);
+  }
+};
+
+const deleteTaskById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | undefined> => {
+  try {
+    const task = await deleteTaskByIdForUser(
+      Number(req.params.taskId),
+      Number(req.user.userId)
+    );
+    if (!task) {
+      res.status(404).json({ message: "Task not found" });
+      return;
+    }
+    res.status(200).json({ message: "Task deleted" });
   } catch (error) {
     console.error("error", error);
     next(error);

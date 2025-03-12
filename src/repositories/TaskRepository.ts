@@ -20,3 +20,17 @@ export const findOneTaskById = async (taskId, userId) => {
 
   return task;
 };
+
+export const deleteTaskById = async (taskId, userId) => {
+  const task = await Task.findOne({
+    where: { id: taskId, userId },
+  });
+
+  if (!task) {
+    return null;
+  }
+
+  await task.destroy();
+
+  return task;
+};
