@@ -3,6 +3,7 @@ import { jwtMiddleware } from "../middleware/errorHandling.js";
 import {
   createNewTaskForUser,
   getAllTasksForUser,
+  getTaskByIdForUser,
 } from "../services/TaskService.js";
 
 export const initTaskRoutes = (router: Router) => {
@@ -26,6 +27,40 @@ export const initTaskRoutes = (router: Router) => {
    * @return {CreatedTask} 201 - Successful
    */
   router.post("/tasks", jwtMiddleware, createNewTask);
+
+  /**
+   * GET /tasks/{taskId}
+   * @security BearerAuth
+   * @tags Tasks
+   * @summary Get a task
+   * @description Get a task by its ID
+   * @param {number} taskId.path.required - Task ID
+   * @return {CreatedTask} 200 - Task found
+   */
+  router.get("/tasks/:taskId", jwtMiddleware, getTaskById);
+
+  /**
+   * PUT /tasks/{taskId}
+   * @security BearerAuth
+   * @tags Tasks
+   * @summary Update a task
+   * @description Update a task by its ID
+   * @param {number} taskId.path.required - Task ID
+   * @param {Task} request.body.required - Task details
+   * @return {CreatedTask} 200 - Task updated
+   */
+  // router.put("/tasks/:taskId", jwtMiddleware, updateTaskById);
+
+  /**
+   * DELETE /tasks/{taskId}
+   * @security BearerAuth
+   * @tags Tasks
+   * @summary Delete a task
+   * @description Delete a task by its ID
+   * @param {number} taskId.path.required - Task ID
+   * @return {string} 200 - Task deleted
+   */
+  // router.delete("/tasks/:taskId", jwtMiddleware, deleteTaskById);
 };
 
 const getTasks = async (
@@ -58,6 +93,27 @@ const createNewTask = async (
       userId: req.user.userId,
     });
     res.status(201).json(created);
+  } catch (error) {
+    console.error("error", error);
+    next(error);
+  }
+};
+
+const getTaskById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | undefined> => {
+  try {
+    const task = await getTaskByIdForUser(
+      Number(req.params.taskId),
+      Number(req.user.userId)
+    );
+    if (!task) {
+      res.status(404).json({ message: "Task not found" });
+      return;
+    }
+    res.status(200).json(task);
   } catch (error) {
     console.error("error", error);
     next(error);

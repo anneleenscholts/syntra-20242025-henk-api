@@ -12,3 +12,11 @@ export const findAllUserTasks = async (userId) => {
 
   return events;
 };
+
+export const findOneTaskById = async (taskId, userId) => {
+  const task = await Task.findOne({
+    where: { id: taskId, userId },
+  });
+
+  return task;
+};
