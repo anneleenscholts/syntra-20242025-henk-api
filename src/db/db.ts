@@ -5,9 +5,10 @@ import { EventDefinition } from "../models/db/Event.js";
 import { InvitationDefinition } from "../models/db/Invitation.js";
 import { UserPreferencesDefinition } from "../models/db/UserPreferences.js";
 import { up as changeEventDataTypes } from "../db/migrations/20250219201300-change-event-start-end-to-date.js";
+import { TaskDefinition } from "../models/db/Task.js";
 
 // Connect to PostgreSQL
-let User, Group, Event, Invitation, UserPreferences;
+let User, Group, Event, Invitation, UserPreferences, Task;
 let db: Sequelize;
 
 export const initDB = async (connectionString: string) => {
@@ -24,6 +25,7 @@ const initModels = () => {
   Event = db.define("Event", EventDefinition);
   Invitation = db.define("Invitation", InvitationDefinition);
   UserPreferences = db.define("UserPreferences", UserPreferencesDefinition);
+  Task = db.define("Task", TaskDefinition);
 
   const UserGroup = db.define("UserGroup", {});
 
@@ -37,6 +39,9 @@ const initModels = () => {
   Invitation.belongsTo(Group, { foreignKey: "invitedForId", as: "invitedFor" });
 
   User.hasOne(Event, { foreignKey: "organizer" });
+
+  User.hasMany(Task, { foreignKey: "userId" });
+  Task.belongsTo(User, { foreignKey: "userId" });
 
   User.belongsToMany(Group, { through: UserGroup });
   Group.belongsToMany(User, { through: UserGroup });
@@ -74,4 +79,4 @@ const runMigrations = async () => {
   }
 };
 
-export { User, Group, Event, Invitation, UserPreferences, db };
+export { User, Group, Event, Invitation, UserPreferences, Task, db };
