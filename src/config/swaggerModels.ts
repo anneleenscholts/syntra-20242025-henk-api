@@ -92,3 +92,23 @@
  * @property {UserDTO} invitee - The user who is invited
  * @property {Group} invitedFor - The group the user is invited for
  */
+
+/**
+ * Created Task
+ * @typedef {object} CreatedTask
+ * @property {number} id - The task id
+ * @property {string} title - The task title
+ * @property {string} description - The task description
+ * @property {string} dueDate - The due date
+ * @property {number} userId - The user id
+ * @property {string} updatedAt - The updated timestamp
+ * @property {string} createdAt - The created timestamp
+ */
+
+/**
+ * Task
+ * @typedef {object} Task
+ * @property {string} title.required - The task title
+ * @property {string} description.required - The task description
+ * @property {string} dueDate - The due date
+ */
