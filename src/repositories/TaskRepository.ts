@@ -34,3 +34,15 @@ export const deleteTaskById = async (taskId, userId) => {
 
   return task;
 };
+
+export const updateTaskById = async (taskId, userId, task) => {
+  const [updated] = await Task.update(task, {
+    where: { id: taskId, userId },
+  });
+
+  if (updated === 0) {
+    return null;
+  }
+
+  return updated;
+};

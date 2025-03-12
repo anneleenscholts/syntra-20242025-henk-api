@@ -5,6 +5,7 @@ import {
   deleteTaskByIdForUser,
   getAllTasksForUser,
   getTaskByIdForUser,
+  updateTaskByIdForUser,
 } from "../services/TaskService.js";
 
 export const initTaskRoutes = (router: Router) => {
@@ -50,7 +51,7 @@ export const initTaskRoutes = (router: Router) => {
    * @param {Task} request.body.required - Task details
    * @return {CreatedTask} 200 - Task updated
    */
-  // router.put("/tasks/:taskId", jwtMiddleware, updateTaskById);
+  router.put("/tasks/:taskId", jwtMiddleware, updateTaskById);
 
   /**
    * DELETE /tasks/{taskId}
@@ -136,6 +137,34 @@ const deleteTaskById = async (
       return;
     }
     res.status(200).json({ message: "Task deleted" });
+  } catch (error) {
+    console.error("error", error);
+    next(error);
+  }
+};
+
+const updateTaskById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | undefined> => {
+  try {
+    const { title, description, dueDate } = req.body;
+
+    const task = await updateTaskByIdForUser(
+      Number(req.params.taskId),
+      Number(req.user.userId),
+      {
+        title,
+        description,
+        dueDate: dueDate ? new Date(dueDate) : null,
+      }
+    );
+    if (!task) {
+      res.status(404).json({ message: "Task not found" });
+      return;
+    }
+    res.status(200).json(task);
   } catch (error) {
     console.error("error", error);
     next(error);

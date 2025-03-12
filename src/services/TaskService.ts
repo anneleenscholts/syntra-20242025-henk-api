@@ -4,6 +4,7 @@ import {
   deleteTaskById,
   findAllUserTasks,
   findOneTaskById,
+  updateTaskById,
 } from "../repositories/TaskRepository.js";
 
 export function createNewTaskForUser(taskToCreate) {
@@ -20,4 +21,11 @@ export function getTaskByIdForUser(taskId: number, userId: number) {
 
 export function deleteTaskByIdForUser(taskId: number, userId: number) {
   return deleteTaskById(taskId, userId);
+}
+export function updateTaskByIdForUser(
+  taskId: number,
+  userId: number,
+  task: ITask
+) {
+  return updateTaskById(taskId, userId, task);
 }
