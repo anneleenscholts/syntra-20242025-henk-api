@@ -9,7 +9,8 @@ export const createEvent = async (evenToCreate: IEvent) => {
 export const findAllUserEvents = async (
   userId: number,
   from?: Date,
-  to?: Date
+  to?: Date,
+  groupId?: number
 ) => {
   const whereClause: any = {};
 
@@ -31,17 +32,23 @@ export const findAllUserEvents = async (
 
   const username = user.username;
 
+  const whereClauseGroup: any = {
+    [Op.not]: {
+      name: username.toLowerCase(),
+    },
+  };
+
+  if (groupId) {
+    whereClauseGroup.id = groupId;
+  }
+
   const events = await Event.findAll({
     where: whereClause,
     include: [
       {
         model: Group,
         required: true,
-        where: {
-          [Op.not]: {
-            name: username.toLowerCase(),
-          },
-        },
+        where: whereClauseGroup,
         include: [
           {
             model: User,

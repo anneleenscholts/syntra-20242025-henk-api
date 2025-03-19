@@ -1,3 +1,4 @@
+import { BadRequestError } from "../models/errors/BadRequestError.js";
 import { IEventToCreate } from "../models/models.js";
 import {
   createEvent,
@@ -24,14 +25,21 @@ export async function createNewEventForGroup(
   return { ...event.toJSON(), groupId: group.toJSON().id };
 }
 
-export function getAllEventsForAUser(
+export async function getAllEventsForAUser(
   userId: number,
   from: Date,
   to: Date,
+  groupId?: number,
   personal: boolean = false
 ) {
   if (personal) {
     return findAllPersonalEvents(userId, from, to);
   }
-  return findAllUserEvents(userId, from, to);
+  const user = await findUserById(userId);
+  const groups = await user.getGroups();
+  const exists = groups.findIndex((group) => group.toJSON().id === groupId);
+  if (exists < 0) {
+    throw new BadRequestError("User is not a member of the group");
+  }
+  return findAllUserEvents(userId, from, to, groupId);
 }
