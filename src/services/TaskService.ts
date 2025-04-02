@@ -11,8 +11,8 @@ export function createNewTaskForUser(taskToCreate) {
   return createTask(taskToCreate);
 }
 
-export function getAllTasksForUser(userId: number) {
-  return findAllUserTasks(userId);
+export function getAllTasksForUser(userId: number, completed?: boolean) {
+  return findAllUserTasks(userId, completed ?? null);
 }
 
 export function getTaskByIdForUser(taskId: number, userId: number) {
@@ -25,7 +25,15 @@ export function deleteTaskByIdForUser(taskId: number, userId: number) {
 export function updateTaskByIdForUser(
   taskId: number,
   userId: number,
-  task: ITask
+  task: Partial<ITask>
 ) {
   return updateTaskById(taskId, userId, task);
+}
+
+export function completeTaskByIdForUser(taskId: number, userId: number) {
+  return updateTaskById(taskId, userId, { completed: true });
+}
+
+export function uncompleteTaskByIdForUser(taskId: number, userId: number) {
+  return updateTaskById(taskId, userId, { completed: false });
 }

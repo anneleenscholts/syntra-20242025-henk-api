@@ -16,10 +16,16 @@ export const TaskDefinition = {
     allowNull: true,
     unique: false,
   },
+  completed: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
 };
 
 export interface ITask {
   title: string;
   description: string;
   dueDate: Date;
+  completed: boolean;
 }

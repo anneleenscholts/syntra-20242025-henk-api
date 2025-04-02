@@ -5,9 +5,18 @@ export const createTask = async (taskToCreate: ITask) => {
   return Task.create(taskToCreate);
 };
 
-export const findAllUserTasks = async (userId) => {
+export const findAllUserTasks = async (userId, completed?) => {
+  let whereClause = {
+    userId,
+  };
+  if (completed !== null) {
+    whereClause = {
+      ...whereClause,
+      ...{ completed },
+    };
+  }
   const events = await Task.findAll({
-    where: { userId },
+    where: whereClause,
   });
 
   return events;
