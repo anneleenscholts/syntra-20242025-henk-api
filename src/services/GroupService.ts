@@ -10,8 +10,12 @@ import {
 import { createInvitation } from "../repositories/InvitationRepository.js";
 import { findOneById as findUserById } from "../repositories/UserRepository.js";
 
-export async function createGroup(name: string, userId?: number) {
-  const group = await create(name);
+export async function createGroup(
+  name: string,
+  image?: string,
+  userId?: number
+) {
+  const group = await create(name, image);
   if (userId) {
     const user = await findUserById(userId);
     await group.addUser(user);
@@ -24,6 +28,9 @@ export function getGroupByName(name: string) {
 }
 
 export function getGroupById(id: number) {
+  if (!id) {
+    throw new BadRequestError("No group id provided");
+  }
   return findOneById(id);
 }
 
