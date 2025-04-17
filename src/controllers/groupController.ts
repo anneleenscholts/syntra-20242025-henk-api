@@ -10,6 +10,17 @@ import { jwtMiddleware } from "../middleware/errorHandling.js";
 
 export const initGroupRoutes = (router: Router) => {
   /**
+   * GET /groups/:id
+   * @security BearerAuth
+   * @tags Groups
+   * @summary Get a group
+   * @description Get a group by group id
+   * @param {string} id.path.required - The id of the group you want to fetch
+   * @return {Group} 200 - Successful
+   */
+  router.get("/groups/:id", jwtMiddleware, getGroup);
+
+  /**
    * GET /groups
    * @security BearerAuth
    * @tags Groups
@@ -18,16 +29,6 @@ export const initGroupRoutes = (router: Router) => {
    * @return {array<Group>} 200 - Successful
    */
   router.get("/groups", jwtMiddleware, getGroups);
-  /**
-   * GET /groups/:id
-   * @security BearerAuth
-   * @tags Groups
-   * @summary Get a group
-   * @description Get a group by group id
-   * @param {string} id.query.required - The id of the group you want to fetch
-   * @return {Group} 200 - Successful
-   */
-  router.get("/groups/:id", jwtMiddleware, getGroup);
 
   /**
    * DELETE /groups/:id
@@ -35,7 +36,7 @@ export const initGroupRoutes = (router: Router) => {
    * @tags Groups
    * @summary Delete a group by id
    * @description Delete a specific group if you have access to that user (to be defined what this means)
-   * @param {string} id.query.required - The id of the group you want to delete
+   * @param {string} id.path.required - The id of the group you want to delete
    * @return 200
    */
   router.delete("/groups/:id", jwtMiddleware, deleteGroup);
@@ -56,8 +57,8 @@ export const initGroupRoutes = (router: Router) => {
    * @tags Groups
    * @summary Invite a user to a group
    * @description Invite a user to a specific group that is defined by the group id
-   * @param {string} id.query.required - Group id
-   * @param {string} userId.query.required - User id
+   * @param {string} id.path.required - Group id
+   * @param {string} userId.path.required - User id
    * @return 200 - Successful
    */
 
@@ -111,9 +112,9 @@ const createNewGroup = async (
   res: Response,
   next: NextFunction
 ): Promise<void | undefined> => {
-  const { name } = req.body;
+  const { name, image } = req.body;
   try {
-    const group = await createGroup(name, Number(req.user.userId));
+    const group = await createGroup(name, image, Number(req.user.userId));
     res.status(201).json({ message: "Group created successfully", group });
   } catch (error) {
     console.error("error", error);

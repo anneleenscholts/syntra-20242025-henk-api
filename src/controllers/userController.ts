@@ -68,7 +68,7 @@ export const initUserRoutes = (router: Router) => {
    * @tags Users
    * @summary Get user by id
    * @description Get specific user if you have access to that user (to be defined what this means)
-   * @param {string} id.query.required - The id of the user you want to fetch
+   * @param {string} id.path.required - The id of the user you want to fetch
    * @return {UserDTO} 200 - User object
    */
   router.get("/users/:id", jwtMiddleware, getUser);
@@ -79,7 +79,7 @@ export const initUserRoutes = (router: Router) => {
    * @tags Users
    * @summary Delete a user by id
    * @description Delete a specific user if you have access to that user (to be defined what this means)
-   * @param {string} id.query.required - The id of the user you want to delete
+   * @param {string} id.path.required - The id of the user you want to delete
    * @return 200
    */
   router.delete("/users/:id", jwtMiddleware, deleteUser);

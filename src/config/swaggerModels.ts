@@ -10,6 +10,7 @@
  * @typedef {object} Group
  * @property {string} id - Group id
  * @property {string} name - Group name
+ * @property {string} image - Group image
  * @property {string} createdAt - Created timestamp
  * @property {string} updatedAt - Updated timestamp
  */
@@ -18,6 +19,7 @@
  * A CreateGroup
  * @typedef {object} CreateGroup
  * @property {string} name.required - Group name
+ * @property {string} image - Group image
  */
 
 /**
