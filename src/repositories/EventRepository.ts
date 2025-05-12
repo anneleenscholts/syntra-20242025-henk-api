@@ -89,15 +89,17 @@ export const findAllPersonalEvents = async (
 
   const username = user.username;
 
+  const whereClauseGroup: any = {
+    name: username.toLowerCase(),
+  };
+
   const events = await Event.findAll({
     where: whereClause,
     include: [
       {
         model: Group,
         required: true,
-        where: {
-          name: username.toLowerCase(),
-        },
+        where: whereClauseGroup,
         include: [
           {
             model: User,

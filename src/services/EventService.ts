@@ -37,9 +37,11 @@ export async function getAllEventsForAUser(
   }
   const user = await findUserById(userId);
   const groups = await user.getGroups();
-  const exists = groups.findIndex((group) => group.toJSON().id === groupId);
-  if (exists < 0) {
-    throw new BadRequestError("User is not a member of the group");
+  if (groupId) {
+    const exists = groups.findIndex((group) => group.toJSON().id === groupId);
+    if (exists < 0) {
+      throw new BadRequestError("User is not a member of the group");
+    }
   }
   return findAllUserEvents(userId, from, to, groupId);
 }
