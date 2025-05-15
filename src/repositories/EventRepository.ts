@@ -1,4 +1,4 @@
-import { Op, where, col, fn } from "sequelize";
+import { Op } from "sequelize";
 import { Event, Group, User } from "../db/db.js";
 import { IEvent } from "../models/models.js";
 
@@ -30,12 +30,8 @@ export const findAllUserEvents = async (
     throw new Error(`User with ID ${userId} not found`);
   }
 
-  const username = user.username;
-
   const whereClauseGroup: any = {
-    [Op.not]: {
-      name: username.toLowerCase(),
-    },
+    defaultGroup: false,
   };
 
   if (groupId) {
@@ -87,10 +83,8 @@ export const findAllPersonalEvents = async (
     throw new Error(`User with ID ${userId} not found`);
   }
 
-  const username = user.username;
-
   const whereClauseGroup: any = {
-    name: username.toLowerCase(),
+    defaultGroup: true,
   };
 
   const events = await Event.findAll({

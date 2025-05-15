@@ -1,4 +1,5 @@
 import { BadRequestError } from "../models/errors/BadRequestError.js";
+import { NotFoundError } from "../models/errors/NotFoundError.js";
 import { IEventToCreate } from "../models/models.js";
 import {
   createEvent,
@@ -6,7 +7,7 @@ import {
   findAllUserEvents,
 } from "../repositories/EventRepository.js";
 import { findOneById as findUserById } from "../repositories/UserRepository.js";
-import { getGroupById, getGroupByName } from "./GroupService.js";
+import { getDefaultGroupForUser, getGroupById } from "./GroupService.js";
 
 export async function createNewEventForGroup(
   eventToCreate: IEventToCreate,
@@ -18,8 +19,12 @@ export async function createNewEventForGroup(
   if (groupId) {
     group = await getGroupById(groupId);
   } else {
-    const user = await findUserById(userId);
-    group = await getGroupByName(user.toJSON().username);
+    group = await getDefaultGroupForUser(userId);
+  }
+  if (!group) {
+    throw new NotFoundError(
+      "Could not find group - Maybe the group was deleted or the user is not a member of the group"
+    );
   }
   await group.addEvent(event);
   return { ...event.toJSON(), groupId: group.toJSON().id };

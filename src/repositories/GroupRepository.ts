@@ -8,17 +8,31 @@ export const findOneById = async (id: number) => {
   return Group.findOne({ where: { id } });
 };
 
-export const create = async (name: string, image?: string) => {
-  return Group.create({ name, image });
+export const findDefaultGroup = async (userId: number) => {
+  return Group.findOne({
+    where: { defaultGroup: true },
+    include: {
+      model: User,
+      where: { id: userId },
+      through: { attributes: [] },
+    },
+  });
+};
+
+export const create = async (
+  name: string,
+  defaultGroup: boolean = false,
+  image?: string
+) => {
+  return Group.create({ name, defaultGroup, image });
 };
 
 export const findAll = async (userId) => {
-  // return Group.findAll();
   const userWithGroups = await User.findAll({
     where: { id: userId },
     include: {
       model: Group,
-      through: { attributes: [] }, // Exclude UserGroup attributes from the result
+      through: { attributes: [] },
     },
   });
 

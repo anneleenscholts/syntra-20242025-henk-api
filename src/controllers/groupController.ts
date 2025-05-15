@@ -114,7 +114,12 @@ const createNewGroup = async (
 ): Promise<void | undefined> => {
   const { name, image } = req.body;
   try {
-    const group = await createGroup(name, image, Number(req.user.userId));
+    const group = await createGroup(
+      name,
+      false,
+      image,
+      Number(req.user.userId)
+    );
     res.status(201).json({ message: "Group created successfully", group });
   } catch (error) {
     console.error("error", error);

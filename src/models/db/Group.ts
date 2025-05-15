@@ -11,6 +11,11 @@ export const GroupDefinition = {
     allowNull: true,
     unique: false,
   },
+  defaultGroup: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
 };
 
 export interface IGroup {
