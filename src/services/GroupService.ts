@@ -5,6 +5,7 @@ import {
   create,
   findOneById,
   deleteById,
+  findDefaultGroup,
 } from "../repositories/GroupRepository.js";
 import { createInvitation } from "../repositories/InvitationRepository.js";
 import { findOneById as findUserById } from "../repositories/UserRepository.js";
@@ -23,8 +24,8 @@ export async function createGroup(
   return group;
 }
 
-export function getGroupByName(name: string) {
-  return findOne(name);
+export function getDefaultGroupForUser(userId: number) {
+  return findDefaultGroup(userId);
 }
 
 export function getGroupById(id: number) {

@@ -8,6 +8,17 @@ export const findOneById = async (id: number) => {
   return Group.findOne({ where: { id } });
 };
 
+export const findDefaultGroup = async (userId: number) => {
+  return Group.findOne({
+    where: { defaultGroup: true },
+    include: {
+      model: User,
+      where: { id: userId },
+      through: { attributes: [] },
+    },
+  });
+};
+
 export const create = async (
   name: string,
   defaultGroup: boolean = false,
