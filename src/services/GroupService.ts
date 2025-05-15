@@ -1,4 +1,3 @@
-import { group } from "console";
 import { BadRequestError } from "../models/errors/BadRequestError.js";
 import {
   findOne,
@@ -12,10 +11,11 @@ import { findOneById as findUserById } from "../repositories/UserRepository.js";
 
 export async function createGroup(
   name: string,
+  defaultGroup: boolean = false,
   image?: string,
   userId?: number
 ) {
-  const group = await create(name, image);
+  const group = await create(name, defaultGroup, image);
   if (userId) {
     const user = await findUserById(userId);
     await group.addUser(user);

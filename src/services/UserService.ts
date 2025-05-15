@@ -24,7 +24,7 @@ export const registerUser = async (userToCreate: IUserToCreate) => {
   }
   const hashedPassword = await bcrypt.hash(userToCreate.password, 10);
   const user = await createUser({ ...userToCreate, password: hashedPassword });
-  const defaultGroup = await createGroup(userToCreate.username);
+  const defaultGroup = await createGroup(userToCreate.username, true);
   await createUserPreferences(user.toJSON().id);
 
   await user.addGroup(defaultGroup);
