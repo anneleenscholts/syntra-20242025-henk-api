@@ -39,12 +39,11 @@ export function getAllGroupsForUser(userId: number) {
   return findAll(userId);
 }
 
-export async function deleteGroupById(id: number) {
-  const success = await deleteById(id);
-  if (!success) {
+export async function deleteGroupById(id: number, force = false) {
+  try {
+    return await deleteById(id, force);
+  } catch (error) {
     throw new BadRequestError(`Could not delete group with id ${id}`);
-  } else {
-    return true;
   }
 }
 

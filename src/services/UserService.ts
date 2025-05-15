@@ -13,9 +13,10 @@ import {
   update,
 } from "../repositories/UserRepository.js";
 import { BadRequestError } from "../models/errors/BadRequestError.js";
-import { createGroup } from "./GroupService.js";
+import { createGroup, deleteGroupById } from "./GroupService.js";
 import { IUserToCreate, IUserToUpdate } from "../models/models.js";
 import { IUserPreferences } from "../models/db/UserPreferences.js";
+import { findDefaultGroup } from "../repositories/GroupRepository.js";
 
 export const registerUser = async (userToCreate: IUserToCreate) => {
   const exists = await checkIfExists(userToCreate.email, userToCreate.username);
@@ -66,10 +67,12 @@ export const getUserById = async (id: number) => {
 };
 
 export const deleteUserById = async (id: number) => {
+  const group = await findDefaultGroup(id);
   const success = await deleteById(id);
   if (!success) {
     throw new BadRequestError(`Could not delete user with id ${id}`);
   } else {
+    await deleteGroupById(group.id, true);
     return true;
   }
 };

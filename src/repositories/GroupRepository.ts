@@ -43,6 +43,10 @@ export const findAll = async (userId) => {
   return userWithGroups[0].Groups;
 };
 
-export const deleteById = async (id: number) => {
+export const deleteById = async (id: number, force) => {
+  const group = await Group.findOne({ where: { id } });
+  if (group?.defaultGroup && !force) {
+    throw new Error("Default groups cannot be deleted.");
+  }
   return Group.destroy({ where: { id }, force: true });
 };

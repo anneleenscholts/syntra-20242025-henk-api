@@ -149,7 +149,7 @@ const deleteUser = async (
 ): Promise<void | undefined> => {
   try {
     await deleteUserById(Number(req.params.id));
-    res.status(200);
+    res.status(200).json("User deleted");
   } catch (error) {
     console.error("error", error);
     next(error);
