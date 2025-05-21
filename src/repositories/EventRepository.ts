@@ -108,3 +108,29 @@ export const findAllPersonalEvents = async (
 
   return events;
 };
+
+export const deleteEventById = async (eventId, userId) => {
+  const event = await Event.findOne({
+    where: { id: eventId },
+    include: [
+      {
+        model: Group,
+        required: true,
+        include: [
+          {
+            model: User,
+            attributes: [],
+            where: { id: userId },
+            through: { attributes: [] },
+          },
+        ],
+      },
+    ],
+  });
+
+  if (!event) {
+    throw new Error(`Event with ID ${eventId} not found`);
+  }
+
+  return event.destroy();
+};
