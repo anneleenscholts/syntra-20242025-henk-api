@@ -3,6 +3,7 @@ import { NotFoundError } from "../models/errors/NotFoundError.js";
 import { IEventToCreate } from "../models/models.js";
 import {
   createEvent,
+  deleteEventById,
   findAllPersonalEvents,
   findAllUserEvents,
 } from "../repositories/EventRepository.js";
@@ -49,4 +50,8 @@ export async function getAllEventsForAUser(
     }
   }
   return findAllUserEvents(userId, from, to, groupId);
+}
+
+export async function deleteEventByIdForUser(eventId: number, userId: number) {
+  return deleteEventById(eventId, userId);
 }

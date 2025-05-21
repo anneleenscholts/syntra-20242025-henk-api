@@ -2,6 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { jwtMiddleware } from "../middleware/errorHandling.js";
 import {
   createNewEventForGroup,
+  deleteEventByIdForUser,
   getAllEventsForAUser,
 } from "../services/EventService.js";
 
@@ -41,6 +42,17 @@ export const initEventRoutes = (router: Router) => {
    * @return {CreatedEvent} 201 - Successful
    */
   router.post("/events", jwtMiddleware, createNewEvent);
+
+  /**
+   * DELETE /events/{eventId}
+   * @security BearerAuth
+   * @tags Events
+   * @summary Delete an event
+   * @description Delete an event by its ID
+   * @param {number} eventId.path.required - Event ID
+   * @return {string} 200 - Event deleted
+   */
+  router.delete("/events/:eventId", jwtMiddleware, deleteEventById);
 };
 
 const getEvents = async (
@@ -110,6 +122,21 @@ const getPersonalEvents = async (
       true
     );
     res.status(200).json(events);
+  } catch (error) {
+    console.error("error", error);
+    next(error);
+  }
+};
+
+const deleteEventById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | undefined> => {
+  try {
+    const eventId = Number(req.params.eventId);
+    await deleteEventByIdForUser(eventId, Number(req.user.userId));
+    res.status(200).json({ message: "Event deleted successfully" });
   } catch (error) {
     console.error("error", error);
     next(error);
