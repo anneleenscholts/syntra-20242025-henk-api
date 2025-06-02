@@ -8,7 +8,10 @@ import {
   findDefaultGroup,
 } from "../repositories/GroupRepository.js";
 import { createInvitation } from "../repositories/InvitationRepository.js";
-import { findOneById as findUserById } from "../repositories/UserRepository.js";
+import {
+  findOneByEmail,
+  findOneById as findUserById,
+} from "../repositories/UserRepository.js";
 
 export async function createGroup(
   name: string,
@@ -49,10 +52,10 @@ export async function deleteGroupById(id: number, force = false) {
 
 export async function inviteUser(
   groupId: number,
-  userToInvite: number,
+  userToInviteEmail: string,
   inviterId: number
 ) {
-  const user = await findUserById(userToInvite);
+  const user = await findOneByEmail(userToInviteEmail);
   if (!user) {
     throw new BadRequestError("Could not find user to invite");
   }
@@ -64,5 +67,5 @@ export async function inviteUser(
   if (exists < 0) {
     throw new BadRequestError("Cannot invite user to group");
   }
-  return createInvitation(inviterId, userToInvite, groupId);
+  return createInvitation(inviterId, user.id, groupId);
 }

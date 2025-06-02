@@ -10,6 +10,19 @@ import { jwtMiddleware } from "../middleware/errorHandling.js";
 
 export const initGroupRoutes = (router: Router) => {
   /**
+   * POST /groups/{id}/invites
+   * @security BearerAuth
+   * @tags Groups
+   * @summary Invite a user to a group
+   * @description Invite a user to a specific group that is defined by the group id
+   * @param {string} id.path.required - Group id
+   * @param {UserToInvite} request.body.required - Email
+   * @return 200 - Successful
+   */
+
+  router.post("/groups/:id/invites", jwtMiddleware, inviteUserToGroup);
+
+  /**
    * GET /groups/:id
    * @security BearerAuth
    * @tags Groups
@@ -40,6 +53,7 @@ export const initGroupRoutes = (router: Router) => {
    * @return 200
    */
   router.delete("/groups/:id", jwtMiddleware, deleteGroup);
+
   /**
    * POST /groups
    * @security BearerAuth
@@ -50,19 +64,6 @@ export const initGroupRoutes = (router: Router) => {
    * @return {Group} 201 - Successful
    */
   router.post("/groups", jwtMiddleware, createNewGroup);
-
-  /**
-   * POST /groups/:id/invites/:userId
-   * @security BearerAuth
-   * @tags Groups
-   * @summary Invite a user to a group
-   * @description Invite a user to a specific group that is defined by the group id
-   * @param {string} id.path.required - Group id
-   * @param {string} userId.path.required - User id
-   * @return 200 - Successful
-   */
-
-  router.post("/groups/:id/invites/:userId", jwtMiddleware, inviteUserToGroup);
 };
 
 const getGroups = async (
@@ -134,8 +135,8 @@ const inviteUserToGroup = async (
 ): Promise<void | undefined> => {
   try {
     const groupid = req.params.id;
-    const userId = req.params.userId;
-    await inviteUser(Number(groupid), Number(userId), Number(req.user.userId));
+    const { email } = req.body;
+    await inviteUser(Number(groupid), email, Number(req.user.userId));
     res.status(200).json({ message: "User successfully invited" });
   } catch (error) {
     console.error("error", error);
