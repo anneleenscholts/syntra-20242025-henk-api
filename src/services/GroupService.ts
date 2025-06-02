@@ -69,3 +69,18 @@ export async function inviteUser(
   }
   return createInvitation(inviterId, user.id, groupId);
 }
+
+export async function leaveGroup(
+  groupId: number,
+  userId: number
+): Promise<void> {
+  const group = await findOneById(groupId);
+  if (!group) {
+    throw new BadRequestError("Group not found");
+  }
+  const user = await findUserById(userId);
+  if (!user) {
+    throw new BadRequestError("User not found");
+  }
+  await group.removeUser(user);
+}
