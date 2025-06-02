@@ -5,6 +5,7 @@ import {
   getAllGroupsForUser,
   getGroupById,
   inviteUser,
+  leaveGroup,
 } from "../services/GroupService.js";
 import { jwtMiddleware } from "../middleware/errorHandling.js";
 
@@ -21,6 +22,18 @@ export const initGroupRoutes = (router: Router) => {
    */
 
   router.post("/groups/:id/invites", jwtMiddleware, inviteUserToGroup);
+
+  /**
+   * POST /groups/{id}/leave
+   * @security BearerAuth
+   * @tags Groups
+   * @summary Leave a group
+   * @description Leave a specific group that is defined by the group id
+   * @param {string} id.path.required - Group id
+   * @return 200 - Successful
+   */
+
+  router.post("/groups/:id/leave", jwtMiddleware, leaveGroupById);
 
   /**
    * GET /groups/:id
@@ -138,6 +151,21 @@ const inviteUserToGroup = async (
     const { email } = req.body;
     await inviteUser(Number(groupid), email, Number(req.user.userId));
     res.status(200).json({ message: "User successfully invited" });
+  } catch (error) {
+    console.error("error", error);
+    next(error);
+  }
+};
+
+const leaveGroupById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | undefined> => {
+  try {
+    const groupid = req.params.id;
+    await leaveGroup(Number(groupid), Number(req.user.userId));
+    res.status(200).json({ message: "You have left the group" });
   } catch (error) {
     console.error("error", error);
     next(error);
