@@ -114,3 +114,8 @@
  * @property {string} description.required - The task description
  * @property {string} dueDate - The due date
  */
+
+/** UserToInvite
+ * @typedef {object} UserToInvite
+ * @property {string} email.required - The email of the user to invite
+ */
