@@ -34,11 +34,13 @@ export const jwtMiddleware = (req, res, next) => {
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err && err.name === "TokenExpiredError") {
+      return res.status(401).json({ error: "Token expired" });
+    }
     if (err) {
       return res.status(403).json({ error: "Invalid token" });
     }
 
-    // Token is valid; you can pass user info to req.user if needed
     req.user = decoded;
     next();
   });
