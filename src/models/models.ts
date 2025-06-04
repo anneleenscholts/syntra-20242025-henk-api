@@ -15,6 +15,15 @@ export interface IEvent {
   organizer: UserID;
 }
 
+export interface IEventToUpdate {
+  id?: number;
+  title: string;
+  description: string;
+  start: Date;
+  end: Date;
+  organizer?: UserID;
+}
+
 export interface IUserToCreate {
   username: string;
   email: string;

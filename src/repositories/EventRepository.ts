@@ -1,9 +1,37 @@
 import { Op } from "sequelize";
 import { Event, Group, User } from "../db/db.js";
-import { IEvent } from "../models/models.js";
+import { IEvent, IEventToUpdate } from "../models/models.js";
 
 export const createEvent = async (evenToCreate: IEvent) => {
   return Event.create(evenToCreate);
+};
+
+export const updateEvent = async (eventToUpdate: IEventToUpdate) => {
+  const event = await Event.findByPk(eventToUpdate.id);
+  if (!event) {
+    throw new Error(`Event with ID ${eventToUpdate.id} not found`);
+  }
+  return event.update(eventToUpdate);
+};
+
+export const findEventById = async (eventId: number, userId: number) => {
+  return Event.findOne({
+    where: { id: eventId },
+    include: [
+      {
+        model: Group,
+        required: true,
+        include: [
+          {
+            model: User,
+            attributes: [],
+            where: { id: userId },
+            through: { attributes: [] },
+          },
+        ],
+      },
+    ],
+  });
 };
 
 export const findAllUserEvents = async (
