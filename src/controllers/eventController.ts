@@ -4,6 +4,7 @@ import {
   createNewEventForGroup,
   deleteEventByIdForUser,
   getAllEventsForAUser,
+  updateEventForGroup,
 } from "../services/EventService.js";
 
 export const initEventRoutes = (router: Router) => {
@@ -53,6 +54,18 @@ export const initEventRoutes = (router: Router) => {
    * @return {string} 200 - Event deleted
    */
   router.delete("/events/:eventId", jwtMiddleware, deleteEventById);
+
+  /**
+   * PUT /events/{eventId}
+   * @security BearerAuth
+   * @tags Events
+   * @summary Update an event
+   * @description Update an event by its ID
+   * @param {number} eventId.path.required - Event ID
+   * @param {UpdatedEvent} request.body.required - Event details
+   * @return {Event} 200 - Updated event
+   */
+  router.put("/events/:eventId", jwtMiddleware, updateEventById);
 };
 
 const getEvents = async (
@@ -137,6 +150,34 @@ const deleteEventById = async (
     const eventId = Number(req.params.eventId);
     await deleteEventByIdForUser(eventId, Number(req.user.userId));
     res.status(200).json({ message: "Event deleted successfully" });
+  } catch (error) {
+    console.error("error", error);
+    next(error);
+  }
+};
+
+const updateEventById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | undefined> => {
+  try {
+    const eventId = Number(req.params.eventId);
+    const { start, end, title, description } = req.body;
+    const eventToUpdate = {
+      start: new Date(start),
+      end: new Date(end),
+      title,
+      description,
+    };
+    const updatedEvent = await updateEventForGroup(
+      eventId,
+      Number(req.user.userId),
+      eventToUpdate
+    );
+    res
+      .status(200)
+      .json({ message: "Event updated successfully", updatedEvent });
   } catch (error) {
     console.error("error", error);
     next(error);

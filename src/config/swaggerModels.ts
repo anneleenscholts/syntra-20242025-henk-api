@@ -65,6 +65,15 @@
  */
 
 /**
+ * An UpdatedEvent
+ * @typedef {object} UpdatedEvent
+ * @property {string} title.required - Title
+ * @property {string} description.required - Description
+ * @property {string} start.required - Start time
+ * @property {string} end.required - End time
+ */
+
+/**
  * Register response
  * @typedef {object} RegisterResponse
  * @property {string} message - Status message

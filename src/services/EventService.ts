@@ -1,11 +1,13 @@
 import { BadRequestError } from "../models/errors/BadRequestError.js";
 import { NotFoundError } from "../models/errors/NotFoundError.js";
-import { IEventToCreate } from "../models/models.js";
+import { IEventToCreate, IEventToUpdate } from "../models/models.js";
 import {
   createEvent,
   deleteEventById,
   findAllPersonalEvents,
   findAllUserEvents,
+  findEventById,
+  updateEvent,
 } from "../repositories/EventRepository.js";
 import { findOneById as findUserById } from "../repositories/UserRepository.js";
 import { getDefaultGroupForUser, getGroupById } from "./GroupService.js";
@@ -54,4 +56,16 @@ export async function getAllEventsForAUser(
 
 export async function deleteEventByIdForUser(eventId: number, userId: number) {
   return deleteEventById(eventId, userId);
+}
+
+export async function updateEventForGroup(
+  eventId: number,
+  userId: number,
+  eventToUpdate: IEventToUpdate
+) {
+  const event = await findEventById(eventId, userId);
+  if (!event) {
+    throw new NotFoundError("Event not found");
+  }
+  return updateEvent({ ...eventToUpdate, id: event.id, organizer: userId });
 }
