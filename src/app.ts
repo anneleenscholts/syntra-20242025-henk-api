@@ -1,12 +1,11 @@
-import express, { Router } from 'express';
-import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
-import { initDB } from './db/db.js';
+import express, { Router } from "express";
+import bodyParser from "body-parser";
+import dotenv from "dotenv";
+import { initDB } from "./db/db.js";
 import { initRoutes } from "./controllers/router.js";
-import { errorHandlingMiddleware } from './middleware/errorHandling.js';
-import expressJSDocSwagger from 'express-jsdoc-swagger';
-import { swaggerOpts } from './config/swaggerOpts.js';
-
+import { errorHandlingMiddleware } from "./middleware/errorHandling.js";
+import expressJSDocSwagger from "express-jsdoc-swagger";
+import { swaggerOpts } from "./config/swaggerOpts.js";
 
 dotenv.config();
 
@@ -20,15 +19,25 @@ expressJSDocSwagger(app)(swaggerOpts);
 // Middleware
 app.use(bodyParser.json());
 
+//Disable cors
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
 // Routes
 app.use(express.json());
 initRoutes(router);
 app.use("/api", router);
-app.use(errorHandlingMiddleware)
+app.use(errorHandlingMiddleware);
 
 const connectionString = process.env.DB_CONNECTION_STRING || "";
 
-initDB(connectionString)
+initDB(connectionString);
 
 // Start the server
 app.listen(PORT, () => {
