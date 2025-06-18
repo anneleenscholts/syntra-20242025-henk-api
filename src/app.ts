@@ -1,6 +1,7 @@
 import express, { Router } from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
+import cors from "cors";
 import { initDB } from "./db/db.js";
 import { initRoutes } from "./controllers/router.js";
 import { errorHandlingMiddleware } from "./middleware/errorHandling.js";
@@ -20,14 +21,21 @@ expressJSDocSwagger(app)(swaggerOpts);
 app.use(bodyParser.json());
 
 //Disable cors
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+const corsOptions = {
+  origin: ["https://xdthirteen.github.io", "http://localhost:5173"],
+  credentials: true,
+  optionsSuccessStatus: 200, // For legacy browser support
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "X-Requested-With",
+    "Accept",
+    "Origin",
+  ],
+};
+
+app.use(cors(corsOptions));
 
 // Routes
 app.use(express.json());
